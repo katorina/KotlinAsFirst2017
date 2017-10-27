@@ -1,6 +1,10 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson3.task1
 
+import javafx.beans.binding.Bindings.equal
+import java.lang.Math.sqrt
+import java.util.Objects.equals
+
 /**
  * Пример
  *
@@ -21,7 +25,7 @@ fun factorial(n: Int): Double {
  */
 fun isPrime(n: Int): Boolean {
     if (n < 2) return false
-    for (m in 2..Math.sqrt(n.toDouble()).toInt()) {
+    for (m in 2..sqrt(n.toDouble()).toInt()) {
         if (n % m == 0) return false
     }
     return true
@@ -61,16 +65,16 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Например, число 1 содержит 1 цифру, 456 -- 3 цифры, 65536 -- 5 цифр.
  */
 fun digitNumber(n: Int): Int {
-    var N = n
+    var m = Math.abs(n)
     var sum = 0
     if (n == 0) {
         sum = 1
     }
-    while (N > 0) {
+    while (m > 0) {
         sum = sum + 1
-        N /= 10
+        m = m / 10
     }
-return sum
+    return sum
 }
 
 /**
@@ -80,19 +84,19 @@ return sum
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var L = -1
+    var l = -1
     var a = 1
     var b = 1
     if (n == 1 || n == 2) {
-        L = 1
+        l = 1
     }
     else
         for (i in 3..n) {
-            L = a + b
+            l = a + b
             a = b
-            b = L
+            b = l
         }
-return L
+    return l
 }
 
 /**
@@ -102,11 +106,14 @@ return L
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var k = 1
-    while (k % m != 0 || k % n != 0) {
+    var k = 2
+    k = if (m >= n) {
+        m
+    } else n
+    while (!(k % m == 0 && k % n == 0)) {
         k = k + 1
     }
-return k
+    return k
 }
 
 /**
@@ -119,7 +126,7 @@ fun minDivisor(n: Int): Int {
     while (n % k != 0) {
         k = k + 1
     }
-return k
+    return k
 }
 
 /**
@@ -132,7 +139,7 @@ fun maxDivisor(n: Int): Int {
     while (n % k != 0) {
         k = k - 1
     }
-return k
+    return k
 }
 
 /**
@@ -158,7 +165,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
     if (k == 0) {
         L = true
     }
-return L
+    return L
 }
 
 /**
@@ -168,7 +175,26 @@ return L
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
+fun squareBetweenExists(m: Int, n: Int): Boolean {
+    var l = false
+    val m1 = Math.sqrt(m.toDouble())
+    val n1 = Math.sqrt(n.toDouble())
+    val n2 = n / 1
+    var k = m / 1
+    if (m1 % 1 == 0.0 || n1 % 1 == 0.0){
+        l = true
+    }
+    else {
+    for (i in m..n2) {
+        k = k + 1
+        if (Math.sqrt(k.toDouble()) % 1 == 0.0) {
+            l = true
+            break
+        }
+    }
+    }
+    return l
+}
 
 /**
  * Средняя
@@ -194,23 +220,22 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Поменять порядок цифр заданного числа n на обратный: 13478 -> 87431.
  * Не использовать строки при решении задачи.
  */
-
 fun revert(n: Int): Int {
-    var Itog = 0
+    var itog = 0
     var k = 0
-    var N = n
+    var m = n
     var sum = 0
-    while (N > 0) {
+    while (m > 0) {
         sum = sum + 1
-        N /= 10
+        m /= 10
     }
-    N = n
+    m = n
     for (i in sum downTo 1) {
-        k = N % 10
-        Itog = k * Math.pow(10.0, i.toDouble()-1).toInt() + Itog
-        N = N / 10
+        k = m % 10
+        itog = k * Math.pow(10.0, i.toDouble()-1).toInt() + itog
+        m = m / 10
     }
-return Itog
+    return itog
 }
 
 /**
@@ -220,7 +245,11 @@ return Itog
  * первая цифра равна последней, вторая -- предпоследней и так далее.
  * 15751 -- палиндром, 3653 -- нет.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var l = false
+    if (revert(n) == n) l = true
+    return l
+}
 
 /**
  * Средняя
@@ -228,7 +257,20 @@ fun isPalindrome(n: Int): Boolean = TODO()
  * Для заданного числа n определить, содержит ли оно различающиеся цифры.
  * Например, 54 и 323 состоят из разных цифр, а 111 и 0 из одинаковых.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var l = false
+    var k = n / 10
+    var m = -1
+    m = n % 10
+    while (k != 0) {
+        if (k % 10 != m) {
+            l = true
+            break
+        }
+        else k = k / 10
+    }
+    return l
+}
 
 /**
  * Сложная
@@ -237,7 +279,23 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * 149162536496481100121144...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var m = 0 //искомое число
+    var d = 0 //количество "шагов"
+    var k = 0 //текущий квадрат
+    var l = 0
+    for (i in 1..n) {
+        k = i * i
+        d = d + digitNumber(k)
+        if (d >= n) {
+            l = Math.pow(10.0,((d - n).toDouble())).toInt()
+            k = k / l
+            m = k % 10
+            break
+        }
+    }
+    return m
+}
 
 /**
  * Сложная
@@ -246,4 +304,20 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  * 1123581321345589144...
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var m = 0 //искомое число
+    var d = 0 //количество "шагов"
+    var k = 0 //текущее число Фибоначчи
+    var l = 0
+    for (i in 1..n) {
+        k = fib(i)
+        d = d + digitNumber(k)
+        if (d >= n) {
+            l = Math.pow(10.0,((d - n).toDouble())).toInt()
+            k = k / l
+            m = k % 10
+            break
+        }
+    }
+    return m
+}
