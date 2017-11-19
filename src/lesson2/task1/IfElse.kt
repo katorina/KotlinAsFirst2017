@@ -38,7 +38,7 @@ fun ageDescription(age: Int): String {
     return when {
         a == 1 && a != 11 && age != 111 -> "$age год"
         a in 2..4 && age !in 12..14 && age !in 112..114 -> "$age года"
-        age in 10..20 || a == 0 || a in 5..9 || age > 100 && age % 100 in 5..20 -> "$age лет"
+        a == 0 || a in 5..20 || age > 100 && age % 100 in 5..20 || age in 5..20 -> "$age лет"
         else -> "error"
     }
 }
@@ -146,4 +146,5 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int =
         a in c..d && d <= b -> d - a
         else -> -1
     }
+
 
