@@ -71,8 +71,8 @@ fun digitNumber(n: Int): Int {
         sum = 1
     }
     while (m > 0) {
-        sum = sum + 1
-        m = m / 10
+        sum += 1
+        m /= 10
     }
     return sum
 }
@@ -106,14 +106,19 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var k = 2
-    k = if (m >= n) {
-        m
-    } else n
-    while (!(k % m == 0 && k % n == 0)) {
-        k = k + 1
+    return (m / gsd(m, n) * n)
+}
+
+fun gsd(m: Int, n: Int): Int {
+    val min = Math.min(m , n)
+    var res = 0
+    for (i in min downTo 1) {
+        if (m % i == 0 && n % i == 0) {
+            res = i
+            break
+        }
     }
-    return k
+    return res
 }
 
 /**
@@ -124,7 +129,7 @@ fun lcm(m: Int, n: Int): Int {
 fun minDivisor(n: Int): Int {
     var k = 2
     while (n % k != 0) {
-        k = k + 1
+        k += 1
     }
     return k
 }
@@ -137,7 +142,7 @@ fun minDivisor(n: Int): Int {
 fun maxDivisor(n: Int): Int {
     var k = n - 1
     while (n % k != 0) {
-        k = k - 1
+        k -= 1
     }
     return k
 }
@@ -150,22 +155,7 @@ fun maxDivisor(n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var k = 0
-    var min = -1
-    var L = false
-    if (m > n) {
-        min = n
-    }
-    else min = m
-    for (i in min downTo 2) {
-        if (m % i == 0 && n % i == 0) {
-            k = k + 1
-        }
-    }
-    if (k == 0) {
-        L = true
-    }
-    return L
+    return (gsd(m, n) == 1)
 }
 
 /**
@@ -179,14 +169,13 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     var l = false
     val m1 = Math.sqrt(m.toDouble())
     val n1 = Math.sqrt(n.toDouble())
-    val n2 = n / 1
-    var k = m / 1
-    if (m1 % 1 == 0.0 || n1 % 1 == 0.0){
+    var k = m
+    if (m1 % 1 == 0.0 || n1 % 1 == 0.0) {
         l = true
     }
     else {
-    for (i in m..n2) {
-        k = k + 1
+    for (i in m..n) {
+        k ++
         if (Math.sqrt(k.toDouble()) % 1 == 0.0) {
             l = true
             break
@@ -224,16 +213,12 @@ fun revert(n: Int): Int {
     var itog = 0
     var k = 0
     var m = n
-    var sum = 0
-    while (m > 0) {
-        sum = sum + 1
-        m /= 10
-    }
+    var sum = digitNumber(n)
     m = n
     for (i in sum downTo 1) {
         k = m % 10
-        itog = k * Math.pow(10.0, i.toDouble()-1).toInt() + itog
-        m = m / 10
+        itog += k * Math.pow(10.0, i.toDouble() - 1).toInt()
+        m /= 10
     }
     return itog
 }
@@ -246,9 +231,7 @@ fun revert(n: Int): Int {
  * 15751 -- палиндром, 3653 -- нет.
  */
 fun isPalindrome(n: Int): Boolean {
-    var l = false
-    if (revert(n) == n) l = true
-    return l
+    return (revert(n) == n)
 }
 
 /**
@@ -258,18 +241,13 @@ fun isPalindrome(n: Int): Boolean {
  * Например, 54 и 323 состоят из разных цифр, а 111 и 0 из одинаковых.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var l = false
     var k = n / 10
-    var m = -1
-    m = n % 10
+    var m = n % 10
     while (k != 0) {
-        if (k % 10 != m) {
-            l = true
-            break
-        }
-        else k = k / 10
+        if (k % 10 != m) return true
+        else k /= 10
     }
-    return l
+    return false
 }
 
 /**
@@ -282,15 +260,13 @@ fun hasDifferentDigits(n: Int): Boolean {
 fun squareSequenceDigit(n: Int): Int {
     var m = 0 //искомое число
     var d = 0 //количество "шагов"
-    var k = 0 //текущий квадрат
-    var l = 0
     for (i in 1..n) {
-        k = i * i
-        d = d + digitNumber(k)
+        var k = i * i //текущий квадрат
+        d += digitNumber(k)
         if (d >= n) {
-            l = Math.pow(10.0,((d - n).toDouble())).toInt()
-            k = k / l
-            m = k % 10
+            var l = Math.pow(10.0,((d - n).toDouble())).toInt()
+            k /= l
+            var m = k % 10
             break
         }
     }
@@ -307,14 +283,12 @@ fun squareSequenceDigit(n: Int): Int {
 fun fibSequenceDigit(n: Int): Int {
     var m = 0 //искомое число
     var d = 0 //количество "шагов"
-    var k = 0 //текущее число Фибоначчи
-    var l = 0
     for (i in 1..n) {
-        k = fib(i)
-        d = d + digitNumber(k)
+        var k = fib(i)
+        d += digitNumber(k)
         if (d >= n) {
-            l = Math.pow(10.0,((d - n).toDouble())).toInt()
-            k = k / l
+            var l = Math.pow(10.0,((d - n).toDouble())).toInt()
+            k /= l
             m = k % 10
             break
         }
