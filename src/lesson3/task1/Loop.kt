@@ -106,19 +106,14 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    return (m / gsd(m, n) * n)
-}
-
-fun gsd(m: Int, n: Int): Int {
-    val min = Math.min(m , n)
-    var res = 0
-    for (i in min downTo 1) {
-        if (m % i == 0 && n % i == 0) {
-            res = i
-            break
-        }
+    var k = m * n
+    var m1 = m
+    var n1 = n
+    while (m1 != n1) {
+        if (m1 > n1) m1 -= n1 else n1 -= m1
     }
-    return res
+    k /= m1
+    return k
 }
 
 /**
@@ -155,7 +150,15 @@ fun maxDivisor(n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    return (gsd(m, n) == 1)
+    val min = Math.min(m , n)
+    var res = 0
+    for (i in min downTo 1) {
+        if (m % i == 0 && n % i == 0) {
+            res = i
+            break
+        }
+    }
+    return res == 1
 }
 
 /**
@@ -165,25 +168,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var l = false
-    val m1 = Math.sqrt(m.toDouble())
-    val n1 = Math.sqrt(n.toDouble())
-    var k = m
-    if (m1 % 1 == 0.0 || n1 % 1 == 0.0) {
-        l = true
-    }
-    else {
-    for (i in m..n) {
-        k ++
-        if (Math.sqrt(k.toDouble()) % 1 == 0.0) {
-            l = true
-            break
-        }
-    }
-    }
-    return l
-}
+fun squareBetweenExists(m: Int, n: Int): Boolean = (m..n).any { Math.sqrt(it.toDouble()) % 1 == 0.0 }
 
 /**
  * Средняя
@@ -211,12 +196,10 @@ fun cos(x: Double, eps: Double): Double = TODO()
  */
 fun revert(n: Int): Int {
     var itog = 0
-    var k = 0
     var m = n
     var sum = digitNumber(n)
-    m = n
     for (i in sum downTo 1) {
-        k = m % 10
+        var k = m % 10
         itog += k * Math.pow(10.0, i.toDouble() - 1).toInt()
         m /= 10
     }
@@ -264,9 +247,9 @@ fun squareSequenceDigit(n: Int): Int {
         var k = i * i //текущий квадрат
         d += digitNumber(k)
         if (d >= n) {
-            var l = Math.pow(10.0,((d - n).toDouble())).toInt()
+            var l = Math.pow(10.0, ((d - n).toDouble())).toInt()
             k /= l
-            var m = k % 10
+            m = k % 10
             break
         }
     }
