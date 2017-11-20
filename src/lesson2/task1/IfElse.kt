@@ -36,7 +36,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
 fun ageDescription(age: Int): String {
     val a = age % 10
     return when {
-        a == 1 && a != 11 && age != 111 -> "$age год"
+        a == 1 && age != 11 && a != 11 && age != 111 -> "$age год"
         a in 2..4 && age !in 12..14 && age !in 112..114 -> "$age года"
         a == 0 || a in 5..20 || age > 100 && age % 100 in 5..20 || age in 5..20 -> "$age лет"
         else -> "error"
@@ -146,5 +146,4 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int =
         a in c..d && d <= b -> d - a
         else -> -1
     }
-
 
