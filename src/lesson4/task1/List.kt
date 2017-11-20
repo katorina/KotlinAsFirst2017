@@ -227,9 +227,7 @@ fun factorize(n: Int): List<Int> {
  * Разложить заданное натуральное число n > 1 на простые множители.
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  */
-fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = " * ", postfix = "").
-        filter { it != ' ' }
-
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*", postfix = "")
 
 /**
  * Средняя
@@ -264,8 +262,7 @@ fun convert(n: Int, base: Int): List<Int> {
  */
 fun convertToString(n: Int, base: Int): String {
     var list = convert(n, base)
-    var list2: MutableList<Char> = mutableListOf()
-    val a = 'a'.toInt()
+    var list2 = mutableListOf<Char>()
     for (i in 0 until list.size) {
         when {
             list[i] >= 10 -> list2.add('a' + (list[i] - 10))
@@ -284,13 +281,14 @@ fun convertToString(n: Int, base: Int): String {
  */
 fun decimal(digits: List<Int>, base: Int): Int {
     var st = 0.0
-    var res = 0.0
+    var res = 0
     for (i in digits.size - 1 downTo 0) {
-        res += digits[i] * Math.pow(base.toDouble(), st)
+        res += (digits[i] * Math.pow(base.toDouble(), st)).toInt()
         st ++
     }
-    return res.toInt()
+    return res
 }
+
 
 /**
  * Сложная
@@ -346,7 +344,7 @@ fun roman(n: Int): String {
         when (m / 10) {
             in 1..3 -> for (k in 1..m / 10) res += "X"
             4 -> res += "XL"
-            5 -> res += "l"
+            5 -> res += "L"
             in 6..8 -> {
                 res += "L"
                 for (f in 1..m / 10 - 5) res += "X"
