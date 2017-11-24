@@ -66,7 +66,32 @@ fun main(args: Array<String>) {
  * День и месяц всегда представлять двумя цифрами, например: 03.04.2011.
  * При неверном формате входной строки вернуть пустую строку
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    var parts = str.split (' ')
+    var res = ""
+    val list = mutableListOf<String>("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+            "сентября", "октября", "ноября", "декабря")
+    var k = 0
+    if (parts.size != 3) return ""
+    for (part in parts) {
+        if (part[0] !in 'а'..'я') k = part.toInt()
+        when (k) {
+            in 10..31 -> res += "$part."
+            in 1..9 -> res += "0$part."
+            in 32..10000 -> res += part
+            else -> for (i in 0..12) {
+                if (i == 12) return ""
+                if (part == list[i]) {
+                    res += if (i in 1..8) "0" + (i + 1).toString() + "."
+                    else (i + 1).toString() + "."
+                    break
+                }
+            }
+        }
+        k = 0
+    }
+    return res
+}
 
 /**
  * Средняя
@@ -75,7 +100,38 @@ fun dateStrToDigit(str: String): String = TODO()
  * Перевести её в строковый формат вида "15 июля 2016".
  * При неверном формате входной строки вернуть пустую строку
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val list = mutableListOf<String>("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+            "сентября", "октября", "ноября", "декабря")
+    var res = ""
+    var i = 0
+    var parts = digital.split ('.')
+    var digital2 = digital.replace(".", "")
+    for (i in 0 until digital2.length) if (digital2[i] !in '0'..'9') return ""
+    if (parts.size != 3) return ""
+    for (part in parts) {
+        i++
+        when (i) {
+            1 -> {
+                val r = part.toInt()
+                res += "$r "
+            }
+            3 -> {
+                val l = part.toInt()
+                res += "$l"
+            }
+            else -> for (k in 0..12) {
+                val m = part.toInt()
+                if (k == 12 || m == 0) return ""
+                if (m == k) {
+                    res += list[k - 1] + " "
+                    break
+                }
+            }
+        }
+    }
+    return res
+}
 
 /**
  * Средняя
@@ -89,7 +145,14 @@ fun dateDigitToStr(digital: String): String = TODO()
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    if (!(phone.matches (Regex("""\+?[ ]*[0-9]+[ -]*(\([-0-9 ]+\))?[-0-9 ]+""")))) return ""
+    var s = phone.replace (" ", "")
+    s = s.replace ("-", "")
+    s = s.replace ("(", "")
+    s = s.replace (")", "")
+    return s
+}
 
 /**
  * Средняя
@@ -101,7 +164,20 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    var s = jumps.replace ("% ", "")
+    s = s.replace ("- ", "")
+    var s2 = s.replace (" ", "") //просто строка ТОЛЬКО с ЧИСЛАМИ
+    if (s2.isEmpty()) return -1
+    else for (i in 0 until s2.length) if (s2[i] !in '0'..'9') return -1
+    var parts = s.split (' ')
+    var max = 0
+    for (part in parts) {
+        var k = part.toInt()
+        if (k > max) max = k
+    }
+    return max
+}
 
 /**
  * Сложная
