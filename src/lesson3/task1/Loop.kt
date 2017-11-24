@@ -168,7 +168,20 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean = (m..n).any { Math.sqrt(it.toDouble()) % 1 == 0.0 }
+fun squareBetweenExists(m: Int, n: Int): Boolean {
+    var l = false
+    var max = if (m > n) m else n
+    var min = if (m < n) m else n
+    var k = min
+    for (i in min..max) {
+        if (Math.sqrt(k.toDouble()) % 1 == 0.0) {
+            l = true
+            break
+        }
+        k ++
+    }
+    return l
+}
 
 /**
  * Средняя
@@ -247,7 +260,7 @@ fun squareSequenceDigit(n: Int): Int {
         var k = i * i //текущий квадрат
         d += digitNumber(k)
         if (d >= n) {
-            var l = Math.pow(10.0, ((d - n).toDouble())).toInt()
+            var l = Math.pow (10.0, ((d - n).toDouble())).toInt()
             k /= l
             m = k % 10
             break
@@ -278,3 +291,4 @@ fun fibSequenceDigit(n: Int): Int {
     }
     return m
 }
+
