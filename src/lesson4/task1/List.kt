@@ -240,14 +240,14 @@ fun convert(n: Int, base: Int): List<Int> {
     var m = n
     var ost = 0
     val list = mutableListOf<Int>()
-    if (n <= (base - 1)) list.add(n)
+    if (n <= (base - 1)) list.add (n)
     else {
-        while (m > base) {
+        while (m >= base) {
             ost = m % base
-            list.add(ost)
+            list.add (ost)
             m /= base
         }
-    list.add(m)
+        list.add (m)
     }
     return list.reversed()
 }
@@ -302,9 +302,8 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     var st = 0.0
     var res = 0.0
-    var k = 0
     for (i in str.length - 1 downTo 0) {
-        k = if (str[i] in 'a'..'z') str[i] - 'a' + 10
+        var k = if (str[i] in 'a'..'z') str[i] - 'a' + 10
         else str[i].toInt() - 48
         res += k * Math.pow(base.toDouble(), st)
         st ++
