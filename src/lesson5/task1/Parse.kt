@@ -120,9 +120,9 @@ fun dateDigitToStr(digital: String): String {
                 val l = part.toInt()
                 res += "$l"
             }
-            else -> for (k in 0..12) {
+            else -> for (k in 0..13) {
                 val m = part.toInt()
-                if (k == 12 || m == 0) return ""
+                if (k == 13 || m == 0) return ""
                 if (m == k) {
                     res += list[k - 1] + " "
                     break
