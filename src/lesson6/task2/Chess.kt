@@ -197,7 +197,7 @@ fun kingMoveNumber(start: Square, end: Square): Int {
             ystart += y
         }
         if (xstart == end.column && ystart == end.row) return i
-        else if (xstart == end.column) i += Math.abs(end.column - ystart) else i += Math.abs(end.row - xstart)
+        else if (xstart == end.column) i += Math.abs(end.row - ystart) else i += Math.abs(end.column - xstart)
         return i
     }
 }
