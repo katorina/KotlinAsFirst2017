@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson6.task2
 
 /**
@@ -37,11 +38,11 @@ data class Square(val column: Int, val row: Int) {
  * Если нотация некорректна, бросить IllegalArgumentException
  */
 fun square(notation: String): Square {
-    if (!(notation.matches (Regex("""[a-h]*[1-8]""")))) throw IllegalArgumentException()
+    if (!(notation.matches(Regex("""[a-h]*[1-8]""")))) throw IllegalArgumentException()
     var i = 1
     for (k in 'a'..'h') {
         if (notation[0] == k) break
-        i ++
+        i++
     }
     return Square(i, notation[1].toInt() - 48)
 }
@@ -69,7 +70,13 @@ fun square(notation: String): Square {
  * Пример: rookMoveNumber(Square(3, 1), Square(6, 3)) = 2
  * Ладья может пройти через клетку (3, 3) или через клетку (6, 1) к клетке (6, 3).
  */
-fun rookMoveNumber(start: Square, end: Square): Int = TODO()
+fun rookMoveNumber(start: Square, end: Square): Int {
+    return when {
+        (start.column == end.column) xor (start.row == end.row) -> 1
+        start == end -> 0
+        else -> 2
+    }
+}
 
 /**
  * Средняя
@@ -85,7 +92,13 @@ fun rookMoveNumber(start: Square, end: Square): Int = TODO()
  *          rookTrajectory(Square(3, 5), Square(8, 5)) = listOf(Square(3, 5), Square(8, 5))
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun rookTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun rookTrajectory(start: Square, end: Square): List<Square> {
+    return when (rookMoveNumber(start, end)) {
+        0 -> listOf(Square(end.column, end.row))
+        1 -> listOf(Square(start.column, start.row), Square(end.column, end.row))
+        else -> listOf(Square(start.column, start.row), Square(end.column, start.row), Square(end.column, end.row))
+    }
+}
 
 /**
  * Простая
@@ -110,7 +123,17 @@ fun rookTrajectory(start: Square, end: Square): List<Square> = TODO()
  * Примеры: bishopMoveNumber(Square(3, 1), Square(6, 3)) = -1; bishopMoveNumber(Square(3, 1), Square(3, 7)) = 2.
  * Слон может пройти через клетку (6, 4) к клетке (3, 7).
  */
-fun bishopMoveNumber(start: Square, end: Square): Int = TODO()
+fun bishopMoveNumber(start: Square, end: Square): Int {
+    if (!(start.notation().matches(Regex("""[a-h]*[1-8]""")))) throw IllegalArgumentException()
+    if (!(end.notation().matches(Regex("""[a-h]*[1-8]""")))) throw IllegalArgumentException()
+    return when {
+        (start == end) -> 0
+        !(((start.column % 2 == 1 && start.row % 2 == 1 || start.column % 2 == 0 && start.row % 2 == 0) &&
+                (end.column % 2 == 1 && end.row % 2 == 1 || end.column % 2 == 0 && end.row % 2 == 0))) -> -1
+        Math.abs(start.column - end.column) == Math.abs(start.row - end.row) -> 1
+        else -> 2
+    }
+}
 
 /**
  * Сложная
