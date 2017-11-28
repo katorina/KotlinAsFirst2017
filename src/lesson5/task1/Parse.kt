@@ -67,69 +67,47 @@ fun main(args: Array<String>) {
  * При неверном формате входной строки вернуть пустую строку
  */
 fun dateStrToDigit(str: String): String {
-    var parts = str.split (' ')
+    var parts = str.split(' ')
     var res = ""
-    val list = mutableListOf<String>("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+    val months = listOf<String>("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
             "сентября", "октября", "ноября", "декабря")
-    var k = 0
     if (parts.size != 3) return ""
-    for (part in parts) {
-        if (part[0] !in 'а'..'я') k = part.toInt()
-        when (k) {
-            in 10..31 -> res += "$part."
-            in 1..9 -> res += "0$part."
-            in 32..10000 -> res += part
-            else -> for (i in 0..12) {
-                if (i == 12) return ""
-                if (part == list[i]) {
-                    res += if (i in 1..8) "0" + (i + 1).toString() + "."
-                    else (i + 1).toString() + "."
-                    break
-                }
-            }
-        }
-        k = 0
+    res += when (parts[0].toInt()) {
+        in 1..9 -> "0" + parts[0] + "."
+        in 10..31 -> parts[0] + "."
+        else -> return ""
     }
+    val i = months.indexOf(parts[1])
+    res += if (i > -1) {
+        if (i in 0..8) "0" + (i + 1).toString() + "."
+        else (months.indexOf(parts[1]) + 1).toString() + "."
+    } else return ""
+    if (parts[2].toInt() > 0) res += parts[2]
+    else return ""
     return res
 }
 
 /**
  * Средняя
- * 
+ *
  * Дата представлена строкой вида "15.07.2016".
  * Перевести её в строковый формат вида "15 июля 2016".
  * При неверном формате входной строки вернуть пустую строку
  */
 fun dateDigitToStr(digital: String): String {
-    val list = mutableListOf<String>("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+    val list = listOf<String>("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
             "сентября", "октября", "ноября", "декабря")
     var res = ""
-    var i = 0
-    var parts = digital.split ('.')
+    var parts = digital.split('.')
     var digital2 = digital.replace(".", "")
     for (i in 0 until digital2.length) if (digital2[i] !in '0'..'9') return ""
     if (parts.size != 3) return ""
-    for (part in parts) {
-        i++
-        when (i) {
-            1 -> {
-                val r = part.toInt()
-                res += "$r "
-            }
-            3 -> {
-                val l = part.toInt()
-                res += "$l"
-            }
-            else -> for (k in 0..13) {
-                val m = part.toInt()
-                if (k == 13 || m == 0) return ""
-                if (m == k) {
-                    res += list[k - 1] + " "
-                    break
-                }
-            }
-        }
-    }
+    var m = parts[0].toInt()
+    if (m in 1..31) res += "$m" + " "
+    if (parts[1].toInt() in 1..12) res += list[parts[1].toInt() - 1] + " "
+    else return ""
+    m = parts[2].toInt()
+    if (m > 0) res += "$m"
     return res
 }
 
@@ -146,11 +124,9 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    if (!(phone.matches (Regex("""\+?[ ]*[0-9]+[ -]*(\([-0-9 ]+\))?[-0-9 ]+""")))) return ""
-    var s = phone.replace (" ", "")
-    s = s.replace ("-", "")
-    s = s.replace ("(", "")
-    s = s.replace (")", "")
+    if (!(phone.matches(Regex("""\+?[ ]*[0-9]+[ -]*(\([-0-9 ]+\))?[-0-9 ]+""")))) return ""
+    var s = phone.replace(" ", "").replace("-", "").replace("(", "")
+            .replace(")", "")
     return s
 }
 
