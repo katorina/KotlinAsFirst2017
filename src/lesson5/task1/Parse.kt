@@ -82,7 +82,7 @@ fun dateStrToDigit(str: String): String {
         if (i in 0..8) "0" + (i + 1).toString() + "."
         else (months.indexOf(parts[1]) + 1).toString() + "."
     } else return ""
-    if (parts[2].toInt() > 0) res += parts[2]
+    if (parts[2].toInt() >= 0) res += parts[2]
     else return ""
     return res
 }
@@ -107,7 +107,7 @@ fun dateDigitToStr(digital: String): String {
     if (parts[1].toInt() in 1..12) res += list[parts[1].toInt() - 1] + " "
     else return ""
     m = parts[2].toInt()
-    if (m > 0) res += "$m"
+    if (m >= 0) res += "$m"
     return res
 }
 
