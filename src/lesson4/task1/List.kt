@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson4.task1
 
 import lesson1.task1.discriminant
@@ -240,14 +241,14 @@ fun convert(n: Int, base: Int): List<Int> {
     var m = n
     var ost = 0
     val list = mutableListOf<Int>()
-    if (n <= (base - 1)) list.add (n)
+    if (n <= (base - 1)) list.add(n)
     else {
         while (m >= base) {
             ost = m % base
-            list.add (ost)
+            list.add(ost)
             m /= base
         }
-        list.add (m)
+        list.add(m)
     }
     return list.reversed()
 }
@@ -284,7 +285,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
     var res = 0
     for (i in digits.size - 1 downTo 0) {
         res += (digits[i] * Math.pow(base.toDouble(), st)).toInt()
-        st ++
+        st++
     }
     return res
 }
@@ -306,7 +307,7 @@ fun decimalFromString(str: String, base: Int): Int {
         var k = if (str[i] in 'a'..'z') str[i] - 'a' + 10
         else str[i].toInt() - 48
         res += k * Math.pow(base.toDouble(), st)
-        st ++
+        st++
     }
     return res.toInt()
 }
