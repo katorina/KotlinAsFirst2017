@@ -262,15 +262,15 @@ fun convert(n: Int, base: Int): List<Int> {
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
 fun convertToString(n: Int, base: Int): String {
-    var list = convert(n, base)
-    var list2 = mutableListOf<Char>()
-    for (i in 0 until list.size) {
+    var convert = convert(n, base)
+    var res = mutableListOf<Char>()
+    for (i in 0 until convert.size) {
         when {
-            list[i] >= 10 -> list2.add('a' + (list[i] - 10))
-            else -> list2.add('0' + list[i])
+            convert[i] >= 10 -> res.add('a' + (convert[i] - 10))
+            else -> res.add('0' + convert[i])
         }
     }
-    return list2.filter { it != ' ' }.joinToString(separator = "")
+    return res.filter { it != ' ' }.joinToString(separator = "")
 }
 
 /**
@@ -305,7 +305,7 @@ fun decimalFromString(str: String, base: Int): Int {
     var res = 0.0
     for (i in str.length - 1 downTo 0) {
         var k = if (str[i] in 'a'..'z') str[i] - 'a' + 10
-        else str[i].toInt() - 48
+        else str[i].toInt() - '0'.toInt()
         res += k * Math.pow(base.toDouble(), st)
         st++
     }
