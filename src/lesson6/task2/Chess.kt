@@ -24,9 +24,8 @@ data class Square(val column: Int, val row: Int) {
      */
     fun notation(): String {
         if (!inside()) return ""
-        var a = 'a'
-        for (i in 2..column) a++
-        return "$a" + "$row"
+        var column = (column - 1 + 'a'.toInt()).toChar()
+        return "$column" + "$row"
     }
 }
 
@@ -38,13 +37,10 @@ data class Square(val column: Int, val row: Int) {
  * Если нотация некорректна, бросить IllegalArgumentException
  */
 fun square(notation: String): Square {
-    if (!(notation.matches(Regex("""[a-h]*[1-8]""")))) throw IllegalArgumentException()
-    var i = 1
-    for (k in 'a'..'h') {
-        if (notation[0] == k) break
-        i++
-    }
-    return Square(i, notation[1].toInt() - 48)
+    if (!(notation.matches(Regex("""([a-h][1-8])""")))) throw IllegalArgumentException()
+    val column = notation[0].toInt() + 1 - 'a'.toInt()
+    val row = notation[1].toInt() - '0'.toInt()
+    return Square(column, row)
 }
 
 /**
@@ -124,12 +120,10 @@ fun rookTrajectory(start: Square, end: Square): List<Square> {
  * Слон может пройти через клетку (6, 4) к клетке (3, 7).
  */
 fun bishopMoveNumber(start: Square, end: Square): Int {
-    if (!(start.notation().matches(Regex("""[a-h]*[1-8]""")))) throw IllegalArgumentException()
-    if (!(end.notation().matches(Regex("""[a-h]*[1-8]""")))) throw IllegalArgumentException()
+    if (!start.inside() || !end.inside()) throw IllegalArgumentException()
     return when {
         (start == end) -> 0
-        !(((start.column % 2 == 1 && start.row % 2 == 1 || start.column % 2 == 0 && start.row % 2 == 0) &&
-                (end.column % 2 == 1 && end.row % 2 == 1 || end.column % 2 == 0 && end.row % 2 == 0))) -> -1
+        ((start.column + start.row) % 2 != (end.column + end.row) % 2) -> -1
         Math.abs(start.column - end.column) == Math.abs(start.row - end.row) -> 1
         else -> 2
     }
@@ -153,7 +147,29 @@ fun bishopMoveNumber(start: Square, end: Square): Int {
  *          bishopTrajectory(Square(1, 3), Square(6, 8)) = listOf(Square(1, 3), Square(6, 8))
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun bishopTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun equation(start: Square, end: Square): Square {
+    var s1 = start.column - start.row
+    var s2 = start.column + start.row
+    var e1 = end.column - end.row
+    var e2 = end.column + end.row
+    var y = 0
+    var x = (e2 - s1) / 2
+    if (x > 0) y = x + start.column - start.row
+    else {
+        x = (e1 - s2) / 2
+        y = -x + (start.row + start.column)
+    }
+    return Square(y, x)
+}
+
+fun bishopTrajectory(start: Square, end: Square): List<Square> {
+    return when (bishopMoveNumber(start, end)) {
+        -1 -> listOf()
+        0 -> listOf(Square(end.column, end.row))
+        1 -> listOf(Square(start.column, start.row), Square(end.column, end.row))
+        else -> listOf(Square(start.column, start.row), equation(start, end), Square(end.column, end.row))
+    }
+}
 
 /**
  * Средняя
@@ -177,8 +193,7 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> = TODO()
  */
 fun kingMoveNumber(start: Square, end: Square): Int {
     var i = 0
-    if (!(start.notation().matches(Regex("""[a-h]*[1-8]""")))) throw IllegalArgumentException()
-    if (!(end.notation().matches(Regex("""[a-h]*[1-8]""")))) throw IllegalArgumentException()
+    if (!start.inside() || !end.inside()) throw IllegalArgumentException()
     if (start == end) return 0
     else if (start.column == end.column) {
         return Math.abs(start.row - end.row)
