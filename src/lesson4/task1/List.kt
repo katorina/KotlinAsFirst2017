@@ -373,4 +373,66 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun perevod(m: Int, f: Int): String {
+    var n = m //561
+    var res = ""
+    val number: List<String> = listOf<String>("", "один", "два", "три", "четыр", "пять", "шесть", "семь", "восемь", "девять")
+    if (n > 0) {
+        val n1 = n / 100 //сотни
+        val n2 = (n / 10) % 10 //десятки
+        val n3 = n % 10 //единицы
+        when (n1) {
+            1 -> res += "сто "
+            2 -> res += "двести "
+            3 -> res += number[3] + "ста "
+            4 -> res += number[4] + "еста "
+            in 5..9 -> res += number[n1] + "сот "
+        }
+        when (n2) { //+десять
+            1 -> {
+                if (n % 100 == 10) res += "десять "
+                else when (n3) {
+                    1 -> res += number[1] + "надцать "
+                    2 -> res += "двенадцать "
+                    3 -> res += number[3] + "надцать "
+                    in 4..9 -> {
+                        var str = number[n3]
+                        str = str.removeRange(str.length - 1, str.length)
+                        res += str + "надцать " //РАЗОБРАТЬСЯ С ПРОБЕЛОМ
+                    }
+                }
+            }
+            in 2..3 -> res += number[n2] + "дцать "
+            4 -> res += "сорок "
+            in 5..8 -> res += number[n2] + "десят "
+            9 -> res += "девяноста "
+        }
+        if (n2 != 1 && f == 0) { //не тысячи
+            when (n3) {
+                in 1..3 -> res += number[n3] + " "
+                4 -> res += number[4] + "е "
+                in 5..9 -> res += number[n3] + " "
+            }
+        }
+        if (n2 != 1 && f == 1) //тысячи
+            when (n3) {
+                0 -> res += "тысяч "
+                1 -> res += "одна тысяча "
+                2 -> res += "две тысячи "
+                3 -> res += number[n3] + "тысячи "
+                4 -> res += number[4] + "е тысячи "
+                in 5..9 -> res += number[n3] + " тысяч "
+            }
+        if (n2 == 1 && f == 1) res += "тысяч "
+    } else return ""
+    return res
+}
+
+fun russian(n: Int): String {
+    var m1 = n / 1000
+    var m2 = n % 1000
+    var result = perevod(m1, 1)
+    result += perevod(m2, 0)
+    result = result.trim()
+    return result
+}
