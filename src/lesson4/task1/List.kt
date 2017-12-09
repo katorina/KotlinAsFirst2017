@@ -405,7 +405,7 @@ fun perevod(m: Int, f: Int): String {
             in 2..3 -> res += number[n2] + "дцать "
             4 -> res += "сорок "
             in 5..8 -> res += number[n2] + "десят "
-            9 -> res += "девяноста "
+            9 -> res += "девяносто "
         }
         if (n2 != 1 && f == 0) { //не тысячи
             when (n3) {
