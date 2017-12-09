@@ -419,7 +419,7 @@ fun perevod(m: Int, f: Int): String {
                 0 -> res += "тысяч "
                 1 -> res += "одна тысяча "
                 2 -> res += "две тысячи "
-                3 -> res += number[n3] + "тысячи "
+                3 -> res += number[n3] + " тысячи "
                 4 -> res += number[4] + "е тысячи "
                 in 5..9 -> res += number[n3] + " тысяч "
             }
