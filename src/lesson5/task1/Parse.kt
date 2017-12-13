@@ -250,8 +250,22 @@ fun firstDuplicateIndex(str: String): Int {
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть положительными
  */
-fun mostExpensive(description: String): String = TODO()
-
+fun mostExpensive(description: String): String {
+    if (!(description.matches(Regex("""((.+ (\d+\.*\d));?)+""")))) return ""
+    var productsPrices = description.split("; ") //отдельно название товара и его цена
+    var maxPrice = 0.0
+    var expensive = ""
+    for (part in productsPrices) {
+        var currentProduct = part.split(" ") //текущий товар и его цена по частям
+        var product = currentProduct[0] //текущий товар
+        var price = currentProduct[1].toDouble() //текущая цена
+        if (price > maxPrice) {
+            maxPrice = price
+            expensive = product
+        }
+    }
+    return expensive
+}
 /**
  * Сложная
  *
