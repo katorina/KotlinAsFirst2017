@@ -24,8 +24,8 @@ data class Square(val column: Int, val row: Int) {
      */
     fun notation(): String {
         if (!inside()) return ""
-        var column = (column - 1 + 'a'.toInt()).toChar()
-        return "$column" + "$row"
+        val str = "0abcdefgh"
+        return "${str[column]}$row"
     }
 }
 
