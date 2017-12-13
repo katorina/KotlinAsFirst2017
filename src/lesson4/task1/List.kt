@@ -394,7 +394,7 @@ fun perevod(m: Int, f: Int): String {
                 else when (n3) {
                     1 -> res += number[1] + "надцать "
                     2 -> res += "двенадцать "
-                    in 3..4 -> res += number[3] + "надцать "
+                    in 3..4 -> res += number[n2] + "надцать "
                     in 5..9 -> {
                         var str = number[n3]
                         str = str.removeRange(str.length - 1, str.length)
