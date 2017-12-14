@@ -38,8 +38,8 @@ data class Square(val column: Int, val row: Int) {
  */
 fun square(notation: String): Square {
     if (!(notation.matches(Regex("""([a-h][1-8])""")))) throw IllegalArgumentException()
-    val column = notation[0].toInt() + 1 - 'a'.toInt()
-    val row = notation[1].toInt() - '0'.toInt()
+    val column = notation[0] + 1 - 'a'
+    val row = notation[1] - '0'
     return Square(column, row)
 }
 
@@ -67,6 +67,7 @@ fun square(notation: String): Square {
  * Ладья может пройти через клетку (3, 3) или через клетку (6, 1) к клетке (6, 3).
  */
 fun rookMoveNumber(start: Square, end: Square): Int {
+    if (!start.inside() || !end.inside()) throw IllegalArgumentException()
     return when {
         (start.column == end.column) xor (start.row == end.row) -> 1
         start == end -> 0
@@ -147,11 +148,11 @@ fun bishopMoveNumber(start: Square, end: Square): Int {
  *          bishopTrajectory(Square(1, 3), Square(6, 8)) = listOf(Square(1, 3), Square(6, 8))
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun equation(start: Square, end: Square): Square {
-    var s1 = start.column - start.row
-    var s2 = start.column + start.row
-    var e1 = end.column - end.row
-    var e2 = end.column + end.row
+fun secondHop(start: Square, end: Square): Square {
+    val s1 = start.column - start.row
+    val s2 = start.column + start.row
+    val e1 = end.column - end.row
+    val e2 = end.column + end.row
     var y = 0
     var x = (e2 - s1) / 2
     if (x > 0) y = x + start.column - start.row
@@ -167,7 +168,7 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
         -1 -> listOf()
         0 -> listOf(Square(end.column, end.row))
         1 -> listOf(Square(start.column, start.row), Square(end.column, end.row))
-        else -> listOf(Square(start.column, start.row), equation(start, end), Square(end.column, end.row))
+        else -> listOf(Square(start.column, start.row), secondHop(start, end), Square(end.column, end.row))
     }
 }
 
@@ -192,29 +193,28 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
  * Король может последовательно пройти через клетки (4, 2) и (5, 2) к клетке (6, 3).
  */
 fun kingMoveNumber(start: Square, end: Square): Int {
-    var i = 0
     if (!start.inside() || !end.inside()) throw IllegalArgumentException()
     if (start == end) return 0
-    else if (start.column == end.column) {
-        return Math.abs(start.row - end.row)
-    } else if (start.row == end.row) {
-        return Math.abs(start.column - end.column)
-    } else {
-        var x = end.column - start.column
-        var y = end.row - start.row
-        x /= Math.abs(x)
-        y /= Math.abs(y)
-        var xstart = start.column
-        var ystart = start.row
-        while (xstart != end.column && ystart != end.row) {
-            i++
-            xstart += x
-            ystart += y
-        }
-        if (xstart == end.column && ystart == end.row) return i
-        else if (xstart == end.column) i += Math.abs(end.row - ystart) else i += Math.abs(end.column - xstart)
-        return i
+    else {
+        if (start.column == end.column) return Math.abs(start.row - end.row)
+        else if (start.row == end.row) return Math.abs(start.column - end.column)
     }
+    var x = end.column - start.column
+    var y = end.row - start.row
+    x /= Math.abs(x)
+    y /= Math.abs(y)
+    var xstart = start.column
+    var ystart = start.row
+    var moves = 0
+    while (xstart != end.column && ystart != end.row) {
+        moves++
+        xstart += x
+        ystart += y
+    }
+    if (xstart == end.column && ystart == end.row) return moves
+    else if (xstart == end.column) moves += Math.abs(end.row - ystart) else moves += Math.abs(end.column - xstart)
+    return moves
+
 }
 
 /**
