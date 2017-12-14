@@ -149,18 +149,17 @@ fun bishopMoveNumber(start: Square, end: Square): Int {
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
 fun secondHop(start: Square, end: Square): Square {
-    val s1 = start.column - start.row
-    val s2 = start.column + start.row
-    val e1 = end.column - end.row
-    val e2 = end.column + end.row
-    var y = 0
-    var x = (e2 - s1) / 2
-    if (x > 0) y = x + start.column - start.row
-    else {
-        x = (e1 - s2) / 2
-        y = -x + (start.row + start.column)
+    var s1 = start.row - start.column
+    var s2 = end.column + end.row
+    var y = (s1 + s2) / 2
+    var x = y - s1
+    if (!Square(x, y).inside()){
+        s1 = start.row + start.column
+        s2 = end.row - end.column
+        x = y - s2
+        y = (s1 + s2) / 2
     }
-    return Square(y, x)
+    return Square(x, y)
 }
 
 fun bishopTrajectory(start: Square, end: Square): List<Square> {
