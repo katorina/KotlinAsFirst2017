@@ -230,8 +230,54 @@ fun kingMoveNumber(start: Square, end: Square): Int {
  *          kingTrajectory(Square(3, 5), Square(6, 2)) = listOf(Square(3, 5), Square(4, 4), Square(5, 3), Square(6, 2))
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun kingTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun axis(start: Square, end: Square): List<Square> {
+    val res = mutableListOf<Square>()
+    var x = end.column - start.column
+    var y = end.row - start.row
+    var row = start.row
+    var col = start.column
+    when {
+        (x == 0) -> {
+            y /= Math.abs(y)
+            while (row != end.row) {
+                row += y
+                res.add(Square(start.column, row))
+            }
+            return res
+        }
+        else -> {
+            while (col != end.column) {
+                col += x
+                res.add(Square(col, start.row))
+            }
+            return res
+        }
+    }
+}
 
+fun kingTrajectory(start: Square, end: Square): List<Square> {
+    val res = mutableListOf<Square>()
+    when {
+        kingMoveNumber(start, end) == 0 -> return listOf(start) //та же клетка
+        start.column == end.column || start.row == end.row -> return (listOf(start) + axis(start, end))
+        else -> {
+            var xstart = start.column
+            var ystart = start.row
+            var x = end.column - start.column
+            var y = end.row - start.row
+            x /= Math.abs(x)
+            y /= Math.abs(y)
+            while (xstart != end.column && ystart != end.row) { //пока не равны ни столбец, ни строка, пытаемся добиться этого
+                res.add(Square(xstart, ystart))
+                xstart += x
+                ystart += y
+            }
+            res.add(Square(xstart, ystart))
+            if (xstart == end.column && ystart == end.row) return res
+            else return (res + axis(Square(xstart, ystart), end)) //равен либо столбец, либо строка
+        }
+    }
+}
 /**
  * Сложная
  *
