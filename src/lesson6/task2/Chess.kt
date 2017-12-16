@@ -279,6 +279,7 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
         }
     }
 }
+
 /**
  * Сложная
  *
@@ -302,7 +303,42 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
  * Пример: knightMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Конь может последовательно пройти через клетки (5, 2) и (4, 4) к клетке (6, 3).
  */
-fun knightMoveNumber(start: Square, end: Square): Int = TODO()
+fun circleOfMoves(start: Square): List<Square> {
+    val res = mutableListOf<Square>()
+    val row = start.row
+    val col = start.column
+    var y = 1
+    for (i in col - 2..col + 2) {
+        if (i == col) continue
+        val cell1 = Square(i, row - y)
+        val cell2 = Square(i, row + y)
+        if (cell1.inside()) res.add(cell1)
+        if (cell2.inside()) res.add(cell2)
+        y = 2
+        if (i == col + 1) y = 1
+    }
+    return res
+}
+
+fun check(list: List<Square>, end: Square): Boolean {
+    return (0 until list.size).any { list[it] == end }
+}
+
+fun knightMoveNumber(start: Square, end: Square): Int {
+    val list = mutableListOf<Square>()
+    if (!start.inside() || !end.inside()) throw IllegalArgumentException()
+    if (start == end) return 0
+    list.add(start)
+    var moves = 1
+    while (true) {
+        val size = list.size
+        for (i in 0 until size) {
+            list += circleOfMoves(list[i])
+            if (check(list, end)) return moves
+        }
+        moves++
+    }
+}
 
 /**
  * Очень сложная
