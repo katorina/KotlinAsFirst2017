@@ -153,11 +153,11 @@ fun secondHop(start: Square, end: Square): Square {
     var s2 = end.column + end.row
     var y = (s1 + s2) / 2
     var x = y - s1
-    if (!Square(x, y).inside()){
+    if (!Square(x, y).inside()) {
         s1 = start.row + start.column
         s2 = end.row - end.column
-        x = y - s2
         y = (s1 + s2) / 2
+        x = y - s2
     }
     return Square(x, y)
 }
