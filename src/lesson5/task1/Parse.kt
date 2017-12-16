@@ -66,7 +66,8 @@ fun main(args: Array<String>) {
  * При неверном формате входной строки вернуть пустую строку
  */
 fun dateStrToDigit(str: String): String {
-    if (str[0] == ' ' || str.isEmpty()) return ""
+    if (str.isEmpty()) return ""
+    if (str[0] == ' ') return ""
     var parts = str.split(' ')
     var res = ""
     val months = listOf<String>("", "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
