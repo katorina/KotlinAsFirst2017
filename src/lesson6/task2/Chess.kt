@@ -246,6 +246,7 @@ fun axis(start: Square, end: Square): List<Square> {
             return res
         }
         else -> {
+            x /= Math.abs(x)
             while (col != end.column) {
                 col += x
                 res.add(Square(col, start.row))
