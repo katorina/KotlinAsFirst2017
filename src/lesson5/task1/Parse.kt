@@ -68,8 +68,10 @@ fun main(args: Array<String>) {
 fun dateStrToDigit(str: String): String {
     if (str.isEmpty()) return ""
     if (str[0] == ' ') return ""
-    var parts = str.split(' ')
+    val parts = str.split(' ')
+    if (parts.size != 3) return ""
     var res = ""
+    if (!parts[0].all { it.isDigit() } || !parts[2].all { it.isDigit() }) return ""
     val months = listOf<String>("", "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
             "сентября", "октября", "ноября", "декабря")
     if (parts.size != 3) return ""
